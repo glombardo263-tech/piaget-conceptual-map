@@ -1,0 +1,455 @@
+"""
+╔══════════════════════════════════════════════╗
+       PIAGET — COGNITIVE MIND
+       Interactive Conceptual Map
+       Built with Python + SVG
+╚══════════════════════════════════════════════╝
+"""
+
+from html import escape
+
+
+# ==========================================
+# 1. CONFIGURACION VISUAL
+# ==========================================
+
+WIDTH = 1100
+HEIGHT = 1450
+
+COLORS = {
+    "background": "#11111b",
+    "panel": "#1d1b2b",
+    "panel2": "#252238",
+    "purple": "#a78bfa",
+    "pink": "#f0abfc",
+    "blue": "#93c5fd",
+    "green": "#86efac",
+    "yellow": "#fde68a",
+    "white": "#f8fafc",
+    "muted": "#b6b1ca",
+    "line": "#51446f"
+}
+
+svg = []
+
+
+# ==========================================
+# 2. FUNCIONES DE DIBUJO
+# ==========================================
+
+def add(content):
+    svg.append(content)
+
+
+def rectangle(x, y, w, h, color, radius=18,
+              border=None):
+
+    stroke = border or color
+
+    add(f"""
+    <rect x="{x}" y="{y}" width="{w}" height="{h}"
+          rx="{radius}"
+          fill="{color}"
+          stroke="{stroke}"
+          stroke-width="1.5"/>
+    """)
+
+
+def text(x, y, content, size=18,
+         color=None, weight="normal",
+         anchor="start"):
+
+    content = escape(str(content))
+
+    color = color or COLORS["white"]
+
+    add(f"""
+    <text x="{x}" y="{y}"
+          fill="{color}"
+          font-family="Arial, sans-serif"
+          font-size="{size}"
+          font-weight="{weight}"
+          text-anchor="{anchor}">
+          {content}
+    </text>
+    """)
+
+
+def line(x1, y1, x2, y2, color=None):
+
+    add(f"""
+    <line x1="{x1}" y1="{y1}"
+          x2="{x2}" y2="{y2}"
+          stroke="{color or COLORS['line']}"
+          stroke-width="2"/>
+    """)
+
+
+def card(x, y, w, h, title,
+         description, color):
+
+    rectangle(x, y, w, h, COLORS["panel"],
+              border=COLORS["line"])
+
+    text(x + 22, y + 38, title,
+         21, color, "bold")
+
+    current_y = y + 76
+
+    for item in description:
+        text(x + 22, current_y,
+             "• " + item, 15, COLORS["muted"])
+
+        current_y += 29
+
+
+# ==========================================
+# 3. ENCABEZADO
+# ==========================================
+
+add(f"""
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="{WIDTH}" height="{HEIGHT}"
+     viewBox="0 0 {WIDTH} {HEIGHT}">
+
+<defs>
+    <linearGradient id="gradient"
+        x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/>
+        <stop offset="100%" stop-color="#f0abfc"/>
+    </linearGradient>
+</defs>
+
+<rect width="100%" height="100%"
+      fill="{COLORS['background']}"/>
+""")
+
+text(60, 65, "COGNITIVE SCIENCE / 001",
+     14, COLORS["pink"], "bold")
+
+text(60, 125, "Jean Piaget",
+     48, COLORS["white"], "bold")
+
+text(60, 165,
+     "TEORIA DEL DESARROLLO COGNITIVO",
+     17, COLORS["purple"], "bold")
+
+line(60, 195, 1040, 195)
+
+
+# ==========================================
+# 4. INTRODUCCION
+# ==========================================
+
+rectangle(60, 225, 980, 155,
+          COLORS["panel2"], border=COLORS["purple"])
+
+text(90, 265, "01 / INTRODUCCION",
+     14, COLORS["pink"], "bold")
+
+text(90, 310,
+     "¿Como construimos el conocimiento?",
+     25, COLORS["white"], "bold")
+
+text(90, 345,
+     "El niño construye activamente su conocimiento",
+     17, COLORS["muted"])
+
+text(90, 370,
+     "mediante la interaccion con el entorno.",
+     17, COLORS["muted"])
+
+
+# ==========================================
+# 5. CONSTRUCTIVISMO
+# ==========================================
+
+text(60, 435, "02 / FUNDAMENTOS TEORICOS",
+     16, COLORS["purple"], "bold")
+
+card(
+    60, 465, 470, 180,
+    "CONSTRUCTIVISMO",
+    [
+        "El conocimiento se construye",
+        "mediante la experiencia.",
+        "El sujeto participa activamente",
+        "en su propio aprendizaje."
+    ],
+    COLORS["purple"]
+)
+
+card(
+    560, 465, 480, 180,
+    "ESQUEMAS COGNITIVOS",
+    [
+        "Son estructuras mentales.",
+        "Organizan la informacion.",
+        "Se modifican con nuevas",
+        "experiencias y aprendizajes."
+    ],
+    COLORS["pink"]
+)
+
+
+# ==========================================
+# 6. MECANISMOS DEL APRENDIZAJE
+# ==========================================
+
+text(60, 700, "03 / MECANISMOS DEL DESARROLLO",
+     16, COLORS["purple"], "bold")
+
+card(
+    60, 730, 300, 190,
+    "ASIMILACION",
+    [
+        "Incorpora informacion",
+        "a esquemas existentes.",
+        "Interpreta experiencias",
+        "con conocimientos previos."
+    ],
+    COLORS["blue"]
+)
+
+card(
+    400, 730, 300, 190,
+    "ACOMODACION",
+    [
+        "Modifica esquemas",
+        "cuando es necesario.",
+        "Adapta el pensamiento",
+        "a nuevas experiencias."
+    ],
+    COLORS["pink"]
+)
+
+card(
+    740, 730, 300, 190,
+    "EQUILIBRACION",
+    [
+        "Busca el equilibrio",
+        "entre asimilacion y",
+        "acomodacion.",
+        "Impulsa el desarrollo."
+    ],
+    COLORS["green"]
+)
+
+
+# ==========================================
+# 7. ETAPAS DEL DESARROLLO COGNITIVO
+# ==========================================
+
+text(60, 980, "04 / ETAPAS DEL DESARROLLO",
+     16, COLORS["purple"], "bold")
+
+stages = [
+    {
+        "x": 60,
+        "y": 1010,
+        "title": "01. SENSORIOMOTORA",
+        "age": "0 - 2 años (aprox.)",
+        "color": COLORS["blue"],
+        "ideas": [
+            "Aprende mediante sentidos",
+            "y movimientos.",
+            "Desarrolla permanencia",
+            "del objeto."
+        ]
+    },
+    {
+        "x": 560,
+        "y": 1010,
+        "title": "02. PREOPERACIONAL",
+        "age": "2 - 7 años (aprox.)",
+        "color": COLORS["pink"],
+        "ideas": [
+            "Desarrolla el lenguaje.",
+            "Utiliza simbolos e imagenes.",
+            "Pensamiento intuitivo y",
+            "egocentrismo cognitivo."
+        ]
+    },
+    {
+        "x": 60,
+        "y": 1220,
+        "title": "03. OPERACIONES CONCRETAS",
+        "age": "7 - 11 años (aprox.)",
+        "color": COLORS["green"],
+        "ideas": [
+            "Desarrolla pensamiento logico.",
+            "Comprende la conservacion.",
+            "Clasifica y ordena objetos."
+        ]
+    },
+    {
+        "x": 560,
+        "y": 1220,
+        "title": "04. OPERACIONES FORMALES",
+        "age": "Desde 11 - 12 años (aprox.)",
+        "color": COLORS["yellow"],
+        "ideas": [
+            "Razonamiento abstracto.",
+            "Formula hipotesis.",
+            "Piensa en posibilidades.",
+            "Resuelve problemas complejos."
+        ]
+    }
+]
+
+for stage in stages:
+
+    x = stage["x"]
+    y = stage["y"]
+
+    rectangle(
+        x, y, 480, 180,
+        COLORS["panel"],
+        border=stage["color"]
+    )
+
+    text(
+        x + 22, y + 35,
+        stage["title"],
+        19, stage["color"], "bold"
+    )
+
+    text(
+        x + 22, y + 65,
+        stage["age"],
+        14, COLORS["muted"]
+    )
+
+    current_y = y + 98
+
+    for idea in stage["ideas"]:
+        text(
+            x + 22, current_y,
+            "• " + idea,
+            14, COLORS["white"]
+        )
+        current_y += 23
+
+
+# ==========================================
+# 8. APLICACION EDUCATIVA
+# ==========================================
+
+# Espacio inferior de cierre
+# Se crea una segunda seccion en el documento.
+
+add("</svg>")
+
+
+# ==========================================
+# 9. SEGUNDO PANEL EDUCATIVO
+# ==========================================
+
+# Creamos un documento SVG adicional
+# para incluir la conclusion completa.
+
+educational = []
+
+educational.append(f"""
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="{WIDTH}" height="440"
+     viewBox="0 0 {WIDTH} 440">
+
+<rect width="100%" height="100%"
+      fill="{COLORS['background']}"/>
+""")
+
+educational.append("""
+<rect x="60" y="35" width="980" height="260"
+      rx="20" fill="#252238"
+      stroke="#a78bfa" stroke-width="1.5"/>
+""")
+
+educational.append("""
+<text x="90" y="80" fill="#f0abfc"
+      font-size="16" font-weight="bold"
+      font-family="Arial">
+      05 / APLICACION EDUCATIVA
+</text>
+""")
+
+educational.append("""
+<text x="90" y="125" fill="#ffffff"
+      font-size="25" font-weight="bold"
+      font-family="Arial">
+      Aprender construyendo
+</text>
+""")
+
+educational_items = [
+    "Respetar el ritmo de desarrollo de cada niño.",
+    "Promover la exploracion y experimentacion.",
+    "Proponer desafios adecuados a cada etapa.",
+    "Favorecer el aprendizaje activo.",
+    "Relacionar conocimientos previos con nuevos saberes."
+]
+
+for index, item in enumerate(educational_items):
+    y = 170 + index * 25
+
+    educational.append(f"""
+    <text x="95" y="{y}"
+          fill="#b6b1ca"
+          font-size="16"
+          font-family="Arial">
+          • {escape(item)}
+    </text>
+    """)
+
+educational.append("""
+<text x="550" y="355"
+      fill="#a78bfa"
+      font-size="21"
+      font-weight="bold"
+      text-anchor="middle"
+      font-family="Arial">
+      "El conocimiento se construye,
+</text>
+
+<text x="550" y="385"
+      fill="#f0abfc"
+      font-size="21"
+      text-anchor="middle"
+      font-family="Arial">
+      no se recibe pasivamente."
+</text>
+
+<text x="550" y="420"
+      fill="#b6b1ca"
+      font-size="12"
+      text-anchor="middle"
+      font-family="Arial">
+      PIAGET / COGNITIVE MIND / PYTHON PROJECT
+</text>
+
+</svg>
+""")
+
+# ==========================================
+# 10. GUARDAR LOS ARCHIVOS
+# ==========================================
+
+with open("piaget_conceptual_map.svg",
+          "w", encoding="utf-8") as file:
+
+    file.write("\n".join(svg))
+
+with open("piaget_educational_panel.svg",
+          "w", encoding="utf-8") as file:
+
+    file.write("\n".join(educational))
+
+
+print("====================================")
+print("       PIAGET COGNITIVE MIND")
+print("====================================")
+print("Main map: CREATED")
+print("Educational panel: CREATED")
+print("Design: DARK PURPLE / LAVENDER")
+print("Status: SUCCESS")
+print("====================================")
